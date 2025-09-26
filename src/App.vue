@@ -1,11 +1,75 @@
-<script setup lang="ts"></script>
+<script lang="ts">
+import { useAuthStore } from '@/stores/authStore.ts';
+import type { StoreDefinition } from 'pinia'
+
+export default {
+  data(): {
+    email: string,
+    password: string,
+    authStore: StoreDefinition
+  } {
+    return {
+      email: '',
+      password: '',
+      authStore: useAuthStore(),
+    }
+  },
+  computed: {
+    isAuthenticated() {
+      return this.authStore.isAuthenticated;
+    },
+    user() {
+      return this.authStore.user;
+    },
+    authError() {
+      return this.authStore.errorMessage;
+    }
+  },
+  methods: {
+    logout() {
+      this.authStore.logout();
+    },
+    login() {
+      this.authStore.login(this.email, this.password);
+    },
+  },
+  mounted() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.authStore.isAuthenticated = true;
+      this.authStore.getUser();
+    }
+  }
+}
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <header>
+    <nav>
+      <div v-if="isAuthenticated && user">
+        Welcome, {{ user.first_name }}
+        <button @click="logout">Logout</button>
+      </div>
+      <div v-else>
+        <form @submit.prevent="login">
+          <div>
+            <label for="email">Email:</label>
+            <input v-model="email" type="email" id="email" required />
+          </div>
+          <div>
+            <label for="email">Password:</label>
+            <input v-model="password" type="password" id="password" required />
+          </div>
+          <button type="submit">Login</button>
+          <p v-if="authError" class="error">{{ authError }}</p>
+        </form>
+      </div>
+    </nav>
+  </header>
 </template>
 
-<style scoped></style>
+<style scoped>
+.error {
+  color: red;
+}
+</style>
