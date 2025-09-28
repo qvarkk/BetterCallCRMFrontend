@@ -46,6 +46,11 @@ export default {
 <template>
   <header>
     <nav>
+      <ul>
+        <li><router-link to="/">Главная</router-link></li>
+        <li><router-link to="/deals">Сделки</router-link></li>
+        <li><router-link to="/products">Товары</router-link></li>
+      </ul>
       <div v-if="isAuthenticated && user">
         Welcome, {{ user.first_name }}
         <button @click="logout">Logout</button>
@@ -66,6 +71,7 @@ export default {
       </div>
     </nav>
   </header>
+  <router-view></router-view>
 </template>
 
 <style scoped>
@@ -73,3 +79,4 @@ export default {
   color: red;
 }
 </style>
+ф
