@@ -1,4 +1,5 @@
-import api from '@/plugins/api.ts';
+import api from '@/plugins/axios.ts';
+import type { ApiResponse } from '@/types/api.ts'
 
 export interface Auth {
   user: User;
@@ -19,7 +20,11 @@ export interface User {
   email_verified: boolean;
 }
 
-export const authService = {
+export const authService: {
+  login: () => ApiResponse<Auth>,
+  getUser: () => ApiResponse<User>,
+  logout: () => ApiResponse<LogoutResponse>,
+} = {
   login: (email: string, password: string) => api.post<Auth>('/login', { email, password }),
   getUser: () => api.get<User>('/user'),
   logout: () => api.post<LogoutResponse>('/logout'),

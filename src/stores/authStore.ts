@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { type Auth, authService, type User } from '@/services/authService.ts'
-import type { ApiError } from '@/types/api.ts'
+import type { ApiError, ApiResponse } from '@/types/api.ts'
 
 interface AuthState {
   user: User | null;
@@ -20,9 +20,9 @@ export const useAuthStore = defineStore('auth', {
     async login(email: string, password: string): Promise<void> {
       this.errorMessage = '';
       try {
-        const response: Auth = await authService.login(email, password);
-        this.token = response.token;
-        this.user = response.user;
+        const response = await authService.login(email, password);
+        this.token = response.data.token;
+        this.user = response.data.user;
         this.isAuthenticated = true;
         localStorage.setItem('token', this.token);
       } catch (error: ApiError) {
@@ -32,7 +32,8 @@ export const useAuthStore = defineStore('auth', {
     async getUser(): Promise<User> {
       this.errorMessage = '';
       try {
-        this.user = await authService.getUser();
+        const userResponse = await authService.getUser();
+        this.user = userResponse.data;
       } catch (error: ApiError) {
         this.errorMessage = error.message;
       }

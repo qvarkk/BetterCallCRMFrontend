@@ -101,7 +101,7 @@ export default {
                      required placeholder="Password" class="m-2 sm:w-auto"
                      :class="{'p-invalid': authError}" />
           <Button type="submit">Login</Button>
-          <p v-if="authError" class="error">{{ authError }}</p>
+          <p v-if="authError" class="text-red-500">{{ authError }}</p>
         </form>
       </div>
     </template>
@@ -110,8 +110,5 @@ export default {
 </template>
 
 <style scoped>
-.error {
-  color: red;
-}
 </style>
 ф
