@@ -24,6 +24,7 @@ api.interceptors.response.use(
         (error.response?.data as any)?.message ??
         (error.request ? "No response from server" : error.message),
       status: error.response?.status,
+      code: (error.response?.data as any)?.code,
     };
 
     return Promise.reject(apiError);

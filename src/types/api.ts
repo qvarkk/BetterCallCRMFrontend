@@ -1,10 +1,16 @@
 export interface ApiError {
   message: string;
-  status?: number;
+  status: number;
+  code: number;
 }
 
 export interface ApiResponse<T> {
   data: T;
+}
+
+export interface ApiMessage {
+  message: string;
+  code: number;
 }
 
 export interface PaginationLinks {
@@ -34,6 +40,7 @@ export interface PaginationMetaLink {
 
 export interface PaginatedApiResponse<T> {
   data: T[];
+  status: number;
   links: PaginationLinks;
   meta: PaginationMeta;
 }

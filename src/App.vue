@@ -80,7 +80,7 @@ export default {
       </span>
     </template>
     <template #item="{ item, props, hasSubmenu, root }">
-      <a class="flex items-center ml-6 p-4">
+      <a class="flex items-center p-4">
         <router-link v-if="item.route" :to="item.route">
           <span :class="item.icon" />
           <span class="ml-1">{{ item.label }}</span>
@@ -89,7 +89,7 @@ export default {
     </template>
     <template #end>
       <div v-if="isAuthenticated && user">
-        <span class="pi pi-fw pi-user mr-4" /> {{ user.first_name }}
+        <span class="pi pi-fw pi-user" /> {{ user.first_name }}
         <Button @click="logout" class="ml-4">Logout</Button>
       </div>
       <div v-else>

@@ -1,22 +1,27 @@
 import { defineStore } from 'pinia'
-import type { ApiError } from '@/types/api.ts'
+import type { ApiError, ApiMessage, ApiResponse } from '@/types/api.ts'
 import { type Product, productsService } from '@/services/productsService.ts'
+import type { Api } from '@vitejs/plugin-vue'
 
 interface ProductsState {
   products: Product[];
   count: number;
-  errorMessage: string;
+  responseMessage: string;
+  responseStatus: number;
+  isProductCreated: boolean;
 }
 
 export const useProductsStore = defineStore('products', {
   state: (): ProductsState => ({
     products: [],
     count: null,
-    errorMessage: '',
+    responseMessage: '',
+    responseStatus: 0,
+    isProductCreated: false,
   }),
   actions: {
     async getProducts(perPage: number = 5, page: number = 1): Promise<void> {
-      this.errorMessage = '';
+      this.responseMessage = '';
       try {
         const response = await productsService.getAllPaginated(perPage, page);
         this.products = response.data;
@@ -24,8 +29,20 @@ export const useProductsStore = defineStore('products', {
           this.count = response.meta.total;
         }
       } catch (error: ApiError) {
-        this.errorMessage = error.message;
+        this.responseMessage = error.message;
       }
-    }
+    },
+    async createProduct(formData) {
+      this.responseMessage = '';
+      try {
+        const response = await productsService.createProduct(formData);
+        console.log(response);
+        this.responseMessage = response.message;
+        this.responseStatus = response.code;
+      } catch (error: ApiError) {
+        this.responseMessage = error.message;
+        this.responseStatus = error.status;
+      }
+    },
   }
 });
